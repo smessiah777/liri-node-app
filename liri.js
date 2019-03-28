@@ -1,64 +1,76 @@
 require("dotenv").config();
 
 var keys = require("./keys.js");
+var Spotify = require("node-spotify-api");
 var spotify = new Spotify(keys.spotify);
 // var bands =
+var fs = require("fs");
 var inquirer = require("inquirer");
+var moment = require("moment");
 
-var spotifySearch = function() {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        name: "userInput",
-        message: "What song would you like to search for?"
-      }
-    ])
-    .then(function(search) {
-      // console.log(location.userInput);
+inquirer
+  .prompt([
+    {
+      type: "list",
+      name: "liri choices",
+      message: "What can liri search for you?",
+      choices: ["Concert", "Song", "Movie", "Do What It Says"],
 
-      // Then use the Google Geocoder to Geocode the address
-      keys.spotify(search.userInput, function(err, data) {
-        console.log(JSON.stringify(data, null, 2));
-      });
-    });
-};
-spotifySearch();
+      name: "input"
+    }
+  ])
+  .then(answers => {
+    if (answers.input === "Concert") {
+      console.log("concerts selected");
 
-////////////tried to nest inquirer prompts but i guess i can't
-// inquirer
-//   .prompt([
-//     {
-//       type: "list",
-//       name: "liri choices",
-//       message: "What can liri search for you?",
-//       choices: ["Concert", "Song", "Movie", "Do What It Says"]
-//     }
-//   ])
-//   .then(answers => {
-//     if (inquirer.Concert === true) {
-//       console.log("concerts");
-
-//       inquirer
-//         .prompt([
-//           {
-//             type: "input",
-//             name: "concert",
-//             message: "What concert info do you want?"
-//           }
-//         ])
-//         .then(answers => {
-//           console.log("concert info here");
-//         });
-//     } //else if (choices[1] === true) {
-//     //   console.log("spotify");
-//     // } else if (choices[2] === true) {
-//     //   console.log("movie");
-//     // } else if (choices[3] === true) {
-//     //   console.log("just do it");
-//     // }
-//     else {
-//       console.log("make a selection, please....");
-//     }
-//     console.log("you made a choice");
-//   });
+      inquirer
+        .prompt([
+          {
+            type: "input",
+            name: "concert-search",
+            message: "What concert info do you want?"
+          }
+        ])
+        .then(answers => {
+          console.log("concert info here");
+        });
+    } else if (answers.input === "Song") {
+      inquirer
+        .prompt([
+          {
+            type: "input",
+            name: "spotify-search",
+            message: "What song info do you want?"
+          }
+        ])
+        .then(answers => {
+          console.log("spotify info here");
+        });
+    } else if (answers.input === "Movie") {
+      inquirer
+        .prompt([
+          {
+            type: "input",
+            name: "movie-search",
+            message: "What movie info do you want?"
+          }
+        ])
+        .then(answers => {
+          console.log("movie info here");
+        });
+    } else if (answers.input === "Do What It Says") {
+      inquirer
+        .prompt([
+          {
+            type: "input",
+            name: "do-it-search",
+            message: "Search for text file?"
+          }
+        ])
+        .then(answers => {
+          console.log("text file info here");
+        });
+    } else {
+      console.log("make a selection, please....");
+    }
+  });
